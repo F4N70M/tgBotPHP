@@ -1,2 +1,2 @@
 # tgBotPHP
-Tg Bot on PHP
+in development
