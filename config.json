@@ -1,0 +1,52 @@
+{
+	"api"	:	{
+		"token"		: "<tg_bot_token>"
+	},
+	"php"	:	{
+		"errors"	: true
+	},
+	"bot"	:	{
+		"commands"	:	[],
+
+		"mainSection"	:	"home",
+		
+		"sections"	:	{
+
+			"home"	:	{
+				"parent"	:	false,
+				"message"	: {
+					"text"		:	"Menu:",
+					"buttons"	:	false
+				},
+				"keyboard"	:	{
+					"💬  About"		:	{
+						"method"	:	"action:aboutBot"
+					},
+					"⭐️  Services"	:	{
+						"method"	:	"section:services"
+					},
+					"👤  Profile"	:	{
+						"method"	:	"section:profile"
+					},
+					"✅  Registration"	:	{
+						"method"	:	"action:signup"
+					},
+					"💡  Support"	:	{
+						"method"	:	"section:support"
+					}
+				},
+				"wait"	: false
+			},
+
+			"aboutBot"	:	{
+				"parent"	:	"home",
+				"message"	:	{
+					"text"	:	"{{script:test}}"
+				}
+			}
+		},
+		"scripts"	:	{
+			"test"	:	[]
+		}
+	}
+}
