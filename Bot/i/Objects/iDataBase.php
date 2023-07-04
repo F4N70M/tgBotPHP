@@ -2,13 +2,15 @@
 
 namespace Bot\i\Objects;
 
+use PDO;
+
 interface iDataBase
 {
-	public function __construct();
+	public function __construct(PDO $link);
 
 	public function createUser(int $id, array $data);
 
-	public function userExists(int $id);
+	// public function userExists(int $id);
 
 	public function getUserData(int $id);
 

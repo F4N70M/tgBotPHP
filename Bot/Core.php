@@ -12,6 +12,9 @@ use Bot\Modules\EventHandler;
 class Core implements iCore
 {
 	protected $Api;
+	protected $DataBase;
+	
+	public $EventHandler;
 	public $Logger;
 	
 	public function __construct(string $token, array $config = [])
@@ -20,7 +23,9 @@ class Core implements iCore
 
 		$this->Api = new Api($token);
 
-		$this->DataBase = new DataBase();
+		$connection = new \Bot\Objects\DataBaseConnection("localhost", "root", "root", "tg_main");
+		$dbLink = $connection->get();
+		$this->DataBase = new DataBase($dbLink);
 
 		$this->EventHandler = new EventHandler(
 			$this->Api,

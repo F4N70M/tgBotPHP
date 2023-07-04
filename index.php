@@ -30,19 +30,22 @@ require_once(ROOT_DIR."/autoload.php");
 $Bot = new Bot\Core($token, $botConfig);
 
 
-// Получить обновление
-$update = $Bot->EventHandler->getUpdate();
+// Инициализировать Обработчик обновлений
+$Bot->EventHandler->init();
 
-if ($update) 
-{
-	echo "<code style=\"white-space: pre;\">";
-	print_r($update);
-	echo "</code>";
+// // Получить обновление
+// $update = $Bot->EventHandler->getUpdate();
+
+// if ($update) 
+// {
+// 	echo "<code style=\"white-space: pre;\">";
+// 	print_r($update);
+// 	echo "</code>";
 
 	
 
-	exit("exit");
-}
+// 	exit("exit");
+// }
 
 
 
@@ -52,44 +55,44 @@ if ($update)
 // $result = $statement->execute();
 
 
-try {
+// try {
 
-	// Информация о боте
-	// $Bot->Logger->push($Bot->getMe());
+// 	// Информация о боте
+// 	// $Bot->Logger->push($Bot->getMe());
 
-	// $commands = $Bot->call("getMyCommands", []);
-	// pre($commands);
-	// pre($Bot->getWebhookInfo()["url"]);
+// 	// $commands = $Bot->call("getMyCommands", []);
+// 	// pre($commands);
+// 	// pre($Bot->getWebhookInfo()["url"]);
 
 
-	// Получить данные обновления
-	// $update = $Bot->getUpdate();
-	// $Bot->Logger->push($update);
+// 	// Получить данные обновления
+// 	// $update = $Bot->getUpdate();
+// 	// $Bot->Logger->push($update);
 	
-	if ($update)
-	{
-		$chatId = $update->chat["id"];
-		// $chatId = $update["callback_query"]["from"]["id"]??$update["message"]["from"]["id"];
+// 	if ($update)
+// 	{
+// 		$chatId = $update->chat["id"];
+// 		// $chatId = $update["callback_query"]["from"]["id"]??$update["message"]["from"]["id"];
 
-		$data = [
-			"chat_id"	=> $chatId,
-			// "text"		=> "lolkek"
-			"text"		=> print_r($update,true)
-		];
-		$result = $Bot->sendMessage($data);
-		// $data = [
-		// 	"chat_id"	=> $chatId,
-		// 	// "text"		=> "lolkek"
-		// 	"text"		=> print_r($result,true)
-		// ];
-		// $result = $Bot->sendMessage($data);
-		$Bot->Logger->push($data);
+// 		$data = [
+// 			"chat_id"	=> $chatId,
+// 			// "text"		=> "lolkek"
+// 			"text"		=> print_r($update,true)
+// 		];
+// 		$result = $Bot->sendMessage($data);
+// 		// $data = [
+// 		// 	"chat_id"	=> $chatId,
+// 		// 	// "text"		=> "lolkek"
+// 		// 	"text"		=> print_r($result,true)
+// 		// ];
+// 		// $result = $Bot->sendMessage($data);
+// 		$Bot->Logger->push($data);
 
 
-		// $API->
-	}
+// 		// $API->
+// 	}
 	
-} catch (Exception $e) {
-	print_r($e);
-}
+// } catch (Exception $e) {
+// 	print_r($e);
+// }
 

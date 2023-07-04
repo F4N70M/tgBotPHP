@@ -15,7 +15,19 @@ interface iApi
 	// public function getMe();
 	// public function logOut();
 	// public function close();
-	// public function sendMessage();
+	public function sendMessage(
+		int|string $chat_id,
+		string $text,
+		int $message_thread_id = null,
+		string $parse_mode = null,
+		// array $entities,
+		// bool $disable_web_page_preview,
+		bool $disable_notification = false,
+		bool $protect_content = false,
+		int $reply_to_message_id = null,
+		bool $allow_sending_without_reply = false,
+		array $reply_markup = null,
+	);
 	// public function forwardMessage();
 	// public function copyMessage();
 	// public function sendPhoto();

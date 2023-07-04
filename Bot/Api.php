@@ -19,6 +19,46 @@ class Api implements iApi
 		$this->logger = new Logger(dirname(__DIR__)."/bot.log");
 	}
 
+	/**
+	 *
+	 */
+	public function sendMessage(
+		int|string $chat_id,
+		string $text,
+		int $message_thread_id = null,
+		string $parse_mode = null,
+		// array $entities,
+		// bool $disable_web_page_preview,
+		bool $disable_notification = null,
+		bool $protect_content = null,
+		int $reply_to_message_id = null,
+		bool $allow_sending_without_reply = null,
+		array $reply_markup = null,
+	)
+	{
+		$data = [
+			"chat_id"	=> $chat_id,
+			"text"		=> $text
+		];
+		foreach ([
+			"message_thread_id",
+			"parse_mode",
+			// "entities",
+			// "disable_web_page_preview",
+			"disable_notification",
+			"protect_content",
+			"reply_to_message_id",
+			"allow_sending_without_reply",
+			"reply_markup"
+		] as $key) {
+			$value = $$key;
+			if ($value === null) continue;
+			$data[$key] = $value;
+		}
+
+		$this->call("sendMessage", $data);
+	}
+
 
 	/**
 	 *
