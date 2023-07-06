@@ -13,7 +13,7 @@ class Core implements iCore
 {
 	protected $Api;
 	protected $DataBase;
-	
+
 	public $EventHandler;
 	public $Logger;
 	
@@ -37,22 +37,6 @@ class Core implements iCore
 	}
 
 	/**
-	 * Инициализировать конфигурацию бота
-	 */
-	public function init(array $config)
-	{
-		#
-	}
-
-	/**
-	 * Получить обновление
-	 */
-	// public function getUpdate()
-	// {
-	// 	return $this->Api->getUpdate();
-	// }
-
-	/**
 	 * Отправить сообщение
 	 */
 	public function sendMessage(array $data)
@@ -73,6 +57,9 @@ class Core implements iCore
 		return $this->Api->call("getMe")["result"];
 	}
 
+	/**
+	 * Получить конфигурацию Webhook Tg Bot API
+	 */
 	public function getWebhookInfo()
 	{
 		return $this->Api->call("getWebhookInfo")["result"];

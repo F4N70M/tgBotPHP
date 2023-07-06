@@ -1,5 +1,22 @@
 <?php
 
+/**
+ * Получает запрос
+ * На основе Конфигурации обрабатывает его
+ * Выдает ответ
+ * 
+ * Необходимые данные:
+ * - Update
+ *   - User
+ *   - Chat
+ *     - private
+ *     - group
+ *     - supergroup
+ *     - chanel
+ *  
+ * 
+ */
+
 namespace Bot\Modules;
 
 use Bot\i\Modules\iEventHandler;
@@ -32,9 +49,12 @@ class EventHandler implements iEventHandler
 	/**
 	 *
 	 */
-	public function init()
+	public function init(Update $update = null)
 	{
-		$update = $this->getUpdate();
+		if ($update === null)
+		{
+			$update = $this->getUpdate();
+		}
 
 		if ($update)
 		{
@@ -47,10 +67,11 @@ class EventHandler implements iEventHandler
 			print_r($this->update);
 			echo "</pre>";
 
-			if ($update->isMessage())
+			if ($update->isCallbackQuery())
+			{}
+			elseif ($update->isMessage())
 			{
 				// get bot commands
-				$commands = $this->getCommands();
 				// get bot aliases
 				// get user nav
 				// get user expect status
@@ -86,13 +107,7 @@ class EventHandler implements iEventHandler
 					echo "</pre>";
 				}
 
-
 			}
-
-			// if ($update->isCallbackQuery())
-			// {
-			// 	//
-			// }
 
 			// $command = $this->getCommand($update);
 			// $operation = $this->convertCommandToOperation($command);
@@ -166,44 +181,27 @@ class EventHandler implements iEventHandler
 	 */
 	protected function runNavMethod(string $name)
 	{
+		// если значение относительное
+		if (is_numeric($name))
+		{
+			//TODO: определить name раздела
+		}
+
 		// Если нет такого раздела то сбросить на дефолтный
 		if (!$this->navExist($name))
 		{
 			$name = $this->config["navDefault"];
 		}
 
-		/*
-		$this->Api->sendMessage(
-			chat_id	:	$this->User->getId(),
-			text	:	"test",
-			reply_markup	: [
-				// 'resize_keyboard' => true,
-				// 'one_time_keyboard' => false,
-				'one_time_keyboard' => true,
-				// 'keyboard' => [
-				// 	[["text" => 1],["text" => 2]],
-				// 	[["text" => 3],["text" => 4]],
-				// 	[["text" => 5],["text" => 6]]
-				// ]
-				'inline_keyboard' => [
-					[
-						["text"=>"url", "url"=>"https://core.telegram.org/bots/api#keyboardbutton"],
-						["text"=>"max ".($max=64), "callback_data"=>str_repeat("0123", round($max/4))]
-					]
-				]
-			]
-		);
-		*/
 
 		$config = $this->config["nav"][$name];
 		$formattedConfig = $this->getFormattedConfig($config);
 
 		$this->Api->sendMessage(
-			chat_id			: $formattedConfig["chat_id"],
-			text			: $formattedConfig["text"],
-			reply_markup	: $formattedConfig["reply_markup"]
+			chat_id : $formattedConfig["chat_id"],
+			text : $formattedConfig["text"],
+			reply_markup : $formattedConfig["reply_markup"]
 		);
-
 
 		$this->User->set(["nav" => $name]);
 
@@ -218,9 +216,9 @@ class EventHandler implements iEventHandler
 		$formattedConfig = $this->getFormattedConfig($config);
 
 		$this->Api->sendMessage(
-			chat_id			: $formattedConfig["chat_id"],
-			text			: $formattedConfig["text"],
-			reply_markup	: $formattedConfig["reply_markup"]
+			chat_id : $formattedConfig["chat_id"],
+			text : $formattedConfig["text"],
+			reply_markup : $formattedConfig["reply_markup"]
 		);
 	}
 
@@ -262,12 +260,33 @@ class EventHandler implements iEventHandler
 			}
 			$result["reply_markup"] = [
 				'resize_keyboard' => true,
-				'one_time_keyboard' => false,
+				'one_time_keyboard' => true,
 				'keyboard' => $keyboard
 			];
 		}
 		else
 		{
+			/*
+			$result["reply_markup"] = [
+				// 'resize_keyboard' => true,
+				// 'one_time_keyboard' => true,
+				"inline_keyboard" => [
+					[
+						["text"=>"test 1", "callback_data"=>"test"],
+						["text"=>"test 2", "callback_data"=>"test"]
+					],
+					[
+						["text"=>"test 3", "callback_data"=>"test"],
+						["text"=>"test 4", "callback_data"=>"test"]
+					]
+				],
+				// 'keyboard' => [
+				// 	[["text"=>"test 1"],["text"=>"test 2"]],
+				// 	[["text"=>"test 3"],["text"=>"test 4"]]
+				// ]
+			];
+			*/
+
 			$result["reply_markup"] = null;
 		}
 
@@ -291,36 +310,6 @@ class EventHandler implements iEventHandler
 		if ($this->update == null)
 		{
 			$data = json_decode(file_get_contents('php://input'), true);
-
-
-			// TEST
-			$data = [
-				"update_id" => 167621668,
-				"message" => [
-					"message_id" => 792,
-					"from" => [
-						"id" => 440955330,
-						"is_bot" => false,
-						"first_name" => "KONARD",
-						"username" => "konard",
-						"language_code" => "ru",
-					],
-
-					"chat" => [
-						"id" => 440955330,
-						"first_name" => "KONARD",
-						"username" => "konard",
-						"type" => "private",
-					],
-
-					"date" => 1687987651,
-					"text" => "/start",
-					// "text" => "💬  About",
-				],
-			];
-			// /TEST
-
-			// $this->updateData = $data;
 
 			$this->update = is_array($data)
 				? new Update($data)

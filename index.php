@@ -31,7 +31,32 @@ $Bot = new Bot\Core($token, $botConfig);
 
 
 // Инициализировать Обработчик обновлений
-$Bot->EventHandler->init();
+$Bot->EventHandler->init(
+	new \Bot\Objects\Update([
+		"update_id" => 167621668,
+		"message" => [
+			"message_id" => 792,
+			"from" => [
+				"id" => 440955330,
+				"is_bot" => false,
+				"first_name" => "KONARD",
+				"username" => "konard",
+				"language_code" => "ru",
+			],
+
+			"chat" => [
+				"id" => 440955330,
+				"first_name" => "KONARD",
+				"username" => "konard",
+				"type" => "private",
+			],
+
+			"date" => 1687987651,
+			// "text" => "/start",
+			"text" => "💬  About",
+		],
+	])
+);
 
 // // Получить обновление
 // $update = $Bot->EventHandler->getUpdate();

@@ -24,6 +24,10 @@ class Update implements iUpdate
 		return isset($this->data["message"]) && isset($this->data["message"]["text"]);
 	}
 
+	public function isCallbackQuery(){
+		return isset($this->data["callback_query"]) && isset($this->data["callback_query"]["data"]);
+	}
+
 	public function getText(){
 		return $this->data["message"]["text"];
 	}

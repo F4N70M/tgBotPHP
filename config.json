@@ -1,52 +1,69 @@
 {
 	"api"	:	{
-		"token"		: "<tg_bot_token>"
+		"token"		: "5584515434:AAEvAA8tZbfqedjyfQj9ZN69_AM5HLQbByU"
 	},
 	"php"	:	{
-		"errors"	: true
+		"errors"	: false
 	},
 	"bot"	:	{
-		"commands"	:	[],
+		"commands"	:	{
+			"/start"	:	"nav:home"
+		},
 
-		"mainSection"	:	"home",
+		"navDefault"	:	"home",
 		
-		"sections"	:	{
+		"nav"	:	{
 
 			"home"	:	{
 				"parent"	:	false,
-				"message"	: {
+				"message"	:	{
 					"text"		:	"Menu:",
 					"buttons"	:	false
 				},
 				"keyboard"	:	{
 					"💬  About"		:	{
-						"method"	:	"action:aboutBot"
+						"method"	:	"call:about"
 					},
 					"⭐️  Services"	:	{
-						"method"	:	"section:services"
+						"method"	:	"nav:services"
 					},
 					"👤  Profile"	:	{
-						"method"	:	"section:profile"
+						"method"	:	"nav:profile"
 					},
 					"✅  Registration"	:	{
 						"method"	:	"action:signup"
 					},
 					"💡  Support"	:	{
-						"method"	:	"section:support"
+						"method"	:	"nav:support"
 					}
-				},
-				"wait"	: false
-			},
-
-			"aboutBot"	:	{
-				"parent"	:	"home",
-				"message"	:	{
-					"text"	:	"{{script:test}}"
 				}
 			}
 		},
-		"scripts"	:	{
-			"test"	:	[]
-		}
+		
+		"call"	:	{
+
+			"about"	:	{
+				"message"	:	{
+					"text"		:	"Lorem, ipsum dolor, sit amet consectetur adipisicing elit. Eligendi facere repellat quis, ratione nisi autem quas a eius minus alias neque temporibus nam commodi ducimus, ipsum veritatis dignissimos maxime impedit!",
+					"buttons"	:	false
+				}
+			}
+		},
+
+		"widget"	:	{
+
+			"test"	:	{
+				"nav"	:	{
+					"index"	:	{
+						""	:	""
+					},
+					"item"	:	{
+						""	:	""
+					}
+				}
+			}
+		},
+
+		"scripts"	:	false
 	}
 }
