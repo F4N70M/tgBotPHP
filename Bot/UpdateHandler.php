@@ -17,21 +17,24 @@
  * 
  */
 
-namespace Bot\Modules;
+namespace Bot;
 
-use Bot\i\Modules\iEventHandler;
+use Bot\i\iUpdateHandler;
 
 use Bot\i\iApi;
+use Bot\i\iCore;
 use Bot\i\Objects\iDataBase;
 use Bot\Objects\Update;
 use Bot\Objects\User;
 // use Bot\Logger;
 
-class EventHandler implements iEventHandler
+class UpdateHandler implements iUpdateHandler
 {
-	protected $Api;
-	protected $DataBase;
+	// protected $Api;
+	// protected $DataBase;
+	protected $Bot;
 	protected $config;
+
 	protected $User;
 
 	protected $update;
@@ -39,10 +42,11 @@ class EventHandler implements iEventHandler
 	/**
 	 *
 	 */
-	public function __construct(iApi $api, iDataBase $db, array $config)
+	public function __construct(iCore $bot, array $config)
 	{
-		$this->Api = $api;
-		$this->DataBase = $db;
+		// $this->Api = $api;
+		// $this->DataBase = $db;
+		$this->Bot = $bot;
 		$this->config = $config;
 	}
 
@@ -52,18 +56,19 @@ class EventHandler implements iEventHandler
 	public function init(Update $update = null)
 	{
 		if ($update === null)
-		{
 			$update = $this->getUpdate();
-		}
 
 		if ($update)
 		{
+			$this->User = new User($this->Bot->DataBase, $update->getFrom());
+			if ($this->User->get("nav") === null)
+				$this->User->set(["nav"=>$this->config["navDefault"]]);
 
-			$this->User = new User($this->DataBase, $update->getFrom());
 
 			echo "<pre>";
 			print_r(($backtrace = debug_backtrace())[0]["class"]."::"
 				.$backtrace[0]["function"]."()".PHP_EOL);
+			// print_r($this->User);
 			print_r($this->update);
 			echo "</pre>";
 
@@ -135,8 +140,9 @@ class EventHandler implements iEventHandler
 	/**
 	 * 
 	 */
-	public function isNavMenuCommand(string $command, string $nav)
+	public function isNavMenuCommand(string $command, string|null $nav)
 	{
+
 		return isset($this->config["nav"][$nav]["keyboard"]) &&
 			is_array($this->config["nav"][$nav]["keyboard"]) &&
 			array_key_exists($command, $this->config["nav"][$nav]["keyboard"]);
@@ -155,6 +161,11 @@ class EventHandler implements iEventHandler
 	 */
 	public function runCommand(string $command)
 	{
+			echo "<pre>";
+			print_r(($backtrace = debug_backtrace())[0]["class"]."::"
+				.$backtrace[0]["function"]."()".PHP_EOL);
+			print_r($command);
+			echo "</pre>";
 		// $doString = $this->config["commands"][$command];
 		$doConfig = explode(":", $command);
 		switch ($doConfig[0]) {
@@ -193,18 +204,23 @@ class EventHandler implements iEventHandler
 			$name = $this->config["navDefault"];
 		}
 
-
 		$config = $this->config["nav"][$name];
-		$formattedConfig = $this->getFormattedConfig($config);
+		$sendData = $this->getFormattedConfig($config);
 
-		$this->Api->sendMessage(
-			chat_id : $formattedConfig["chat_id"],
-			text : $formattedConfig["text"],
-			reply_markup : $formattedConfig["reply_markup"]
-		);
+		$result = $this->Bot->sendMessage($sendData);
 
-		$this->User->set(["nav" => $name]);
+		$this->Bot->Logger->push(($backtrace = debug_backtrace())[0]["class"]."::"
+					.$backtrace[0]["function"]."()");
+		$this->Bot->Logger->push("sendMessage");
+		$this->Bot->Logger->push($result);
 
+		if (isset($result["result"]))
+		{
+			$this->User->set(["nav" => $name]);
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
@@ -213,13 +229,16 @@ class EventHandler implements iEventHandler
 	protected function runCallMethod(string $name)
 	{
 		$config = $this->config["call"][$name];
-		$formattedConfig = $this->getFormattedConfig($config);
+		$sendData = $this->getFormattedConfig($config);
 
-		$this->Api->sendMessage(
-			chat_id : $formattedConfig["chat_id"],
-			text : $formattedConfig["text"],
-			reply_markup : $formattedConfig["reply_markup"]
-		);
+		$result = $this->Bot->sendMessage($sendData);
+
+		$this->Bot->Logger->push(($backtrace = debug_backtrace())[0]["class"]."::"
+					.$backtrace[0]["function"]."()");
+		$this->Bot->Logger->push("sendMessage");
+		$this->Bot->Logger->push($result);
+
+		return isset($result["result"]);
 	}
 
 	/**
@@ -287,7 +306,7 @@ class EventHandler implements iEventHandler
 			];
 			*/
 
-			$result["reply_markup"] = null;
+			// $result["reply_markup"] = null;
 		}
 
 		return $result;

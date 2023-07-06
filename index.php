@@ -29,9 +29,10 @@ require_once(ROOT_DIR."/autoload.php");
 // Подключить бота
 $Bot = new Bot\Core($token, $botConfig);
 
+$UpdateHandler = new Bot\UpdateHandler($Bot, $config["bot"]);
 
 // Инициализировать Обработчик обновлений
-$Bot->EventHandler->init(
+$UpdateHandler->init(
 	new \Bot\Objects\Update([
 		"update_id" => 167621668,
 		"message" => [
@@ -52,14 +53,14 @@ $Bot->EventHandler->init(
 			],
 
 			"date" => 1687987651,
-			// "text" => "/start",
-			"text" => "💬  About",
+			"text" => "/start",
+			// "text" => "💬  About",
 		],
 	])
 );
 
 // // Получить обновление
-// $update = $Bot->EventHandler->getUpdate();
+// $update = $UpdateHandler->getUpdate();
 
 // if ($update) 
 // {
@@ -74,9 +75,9 @@ $Bot->EventHandler->init(
 
 
 
-// $command = $Bot->EventHandler->getCommand($update);
-// $operation = $Bot->EventHandler->convertCommandToOperation($command);
-// $statement = $Bot->EventHandler->prepare($operation);
+// $command = $UpdateHandler->getCommand($update);
+// $operation = $UpdateHandler->convertCommandToOperation($command);
+// $statement = $UpdateHandler->prepare($operation);
 // $result = $statement->execute();
 
 

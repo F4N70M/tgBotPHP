@@ -23,9 +23,10 @@ class User implements iUser
 
 		if (!$this->exists())
 		{
-			// $this->DataBase->select()->from()
 			$this->create(is_array($id_data) ? $id_data : ["id"=>$id_data]);
 		}
+		// Получить данные пользователя
+		$this->get();
 	}
 	
 	/**
@@ -79,6 +80,15 @@ class User implements iUser
 	 */
 	public function set(array $data)
 	{
-		return $this->DataBase->setUserData($this->id, $data);
+		$result = $this->DataBase->setUserData($this->id, $data);
+		if ($result)
+		{
+			$this->data = 
+				($result = $this->DataBase->getUser($this->id))
+					? $result[0]
+					: false;
+			return $result;
+		}
+		return false;
 	}
 }

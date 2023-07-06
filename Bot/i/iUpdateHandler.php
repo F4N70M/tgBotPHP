@@ -1,13 +1,14 @@
 <?php
 
-namespace Bot\i\Modules;
+namespace Bot\i;
 
+use Bot\i\iCore;
 use Bot\i\iApi;
 use Bot\i\Objects\iDataBase;
 
-interface iEventHandler
+interface iUpdateHandler
 {
-	public function __construct(iApi $Api, iDataBase $db, array $config);
+	public function __construct(iCore $bot, array $config);
 		// init config
 		// get update
 

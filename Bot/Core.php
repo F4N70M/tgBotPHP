@@ -4,7 +4,6 @@ namespace Bot;
 
 use Bot\i\iCore;
 use Bot\Objects\DataBase;
-use Bot\Modules\EventHandler;
 
 /**
  * 
@@ -12,12 +11,13 @@ use Bot\Modules\EventHandler;
 class Core implements iCore
 {
 	protected $Api;
-	protected $DataBase;
+	public $DataBase;
 
-	public $EventHandler;
+	// public $UpdateHandler;
 	public $Logger;
 	
-	public function __construct(string $token, array $config = [])
+	public function __construct(string $token)
+	// public function __construct(string $token, array $config = [])
 	{
 		$this->Logger = new Logger(__DIR__."/log.txt");
 
@@ -26,12 +26,6 @@ class Core implements iCore
 		$connection = new \Bot\Objects\DataBaseConnection("localhost", "root", "root", "tg_main");
 		$dbLink = $connection->get();
 		$this->DataBase = new DataBase($dbLink);
-
-		$this->EventHandler = new EventHandler(
-			$this->Api,
-			$this->DataBase,
-			$config
-		);
 
 		// $this->init($config);
 	}
@@ -44,10 +38,6 @@ class Core implements iCore
 		return $this->Api->call('sendMessage', $data);
 	}
 
-	/**
-	 * Обработать обновление
-	 */
-	public function processUpdate(){}
 
 	/**
 	 * Получить инфо о боте
@@ -64,4 +54,5 @@ class Core implements iCore
 	{
 		return $this->Api->call("getWebhookInfo")["result"];
 	}
+
 }

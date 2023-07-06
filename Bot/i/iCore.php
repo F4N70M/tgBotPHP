@@ -5,19 +5,12 @@ namespace Bot\i;
 interface iCore
 {
 
-	public function __construct(string $token, array $config = []);
+	public function __construct(string $token);
 
 	// public function setFunction(string $name, callable $func);
 
-	/**
-	 * Получить обновление
-	 */
-	// public function getUpdate();
 
-	/**
-	 * Обработать обновление
-	 */
-	public function processUpdate();
+
 
 }
 

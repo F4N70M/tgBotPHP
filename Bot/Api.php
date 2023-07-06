@@ -104,7 +104,7 @@ class Api implements iApi
 		$result = curl_exec($curl);
 		curl_close($curl);
 		
-		return (json_decode($result, 1) ? json_decode($result, 1) : $result);
+		return (($return = json_decode($result, 1)) ? $return : $result);
 	}
 }
 
